@@ -1,0 +1,7 @@
+{
+	"dependencies": {
+		"webshot": "latest",
+		"mkdirp":  "latest",
+		"moment":  "latest"
+	}
+}
