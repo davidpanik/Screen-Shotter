@@ -40,6 +40,8 @@ function compareScreenshots(alpha, beta, callback) {
 	resemble(fs.readFileSync(alpha))
 	.compareTo(fs.readFileSync(beta))
 	.onComplete(function(data) {
+		console.log('Complete');
+
 		if (Number(data.misMatchPercentage) > settings.differenceThreshold) {
 			// data.getDiffImage().pack().pipe(fs.createWriteStream('diff.png'));
 
@@ -48,9 +50,10 @@ function compareScreenshots(alpha, beta, callback) {
 				beta:       beta,
 				difference: data.getDiffImage().pack()
 			});
+		} else {
+			callback();
 		}
 
-		callback();
 	});
 }
 
