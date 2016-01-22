@@ -1,7 +1,8 @@
 {
 	"dependencies": {
-		"webshot": "latest",
-		"mkdirp":  "latest",
-		"moment":  "latest"
+		"webshot"  : "latest",
+		"mkdirp"   : "latest",
+		"node-resemble-js" : "latest",
+		"moment"   : "latest"
 	}
 }

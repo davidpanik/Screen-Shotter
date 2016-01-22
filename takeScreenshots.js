@@ -14,19 +14,23 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 		profiles = [profiles];
 	}
 
+	callback = callback || function() {};
+
 	var queue = [];
 	var fileStamp = '/' + moment().format('DD_MM_YYYY') + '/' + moment().format('hh_mm') + '/';
+	var newFolders = [];
 
 	// Queue up all sites and profiles
 	sites.forEach(function(site) {
 		profiles.forEach(function(profile) {
-			site.urls.forEach(function(url) {
-				var filePath = settings.rootFolderName + '/' + site.name + fileStamp + profile.name + '/';
+			var filePath = settings.rootFolderName + '/' + site.name + fileStamp + profile.name + '/';
+			newFolders.push(filePath);
 
+			site.urls.forEach(function(url) {
 				queue.push({
-					url: url,
-					filePath: filePath,
-					profile: profile
+					url      : url,
+					filePath : filePath,
+					profile  : profile
 				});
 			});
 		});
@@ -42,6 +46,7 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 			}, settings.throttleDelay);
 		} else {
 			console.log('Finished taking screenshots.');
+			callback(newFolders);
 		}
 	}
 
