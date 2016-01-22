@@ -1,3 +1,5 @@
+// Configure different sites/URL collections to capture here
+
 module.exports = {
 	realise: {
 		name: 'realise',

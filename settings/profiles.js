@@ -1,3 +1,5 @@
+// Configure different "profiles" here for capturing different screensizes / useragents
+
 module.exports = {
 	'desktop': {
 		'name'      : 'desktop',

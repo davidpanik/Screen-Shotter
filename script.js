@@ -2,10 +2,9 @@ var webshot  = require('webshot');
 var mkdirp   = require('mkdirp');
 var moment   = require('moment');
 
-var profiles = require('./profiles');
-var sites    = require('./sites');
-
-var throttle = 200; // Time in MS to wait between screenshots
+var profiles = require('./settings/profiles');
+var sites    = require('./settings/sites');
+var settings = require('./settings/settings');
 
 function takeMultipleScreenshots(sites, profiles, callback) {
 	if (!Array.isArray(sites)) {
@@ -23,7 +22,7 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 	sites.forEach(function(site) {
 		profiles.forEach(function(profile) {
 			site.urls.forEach(function(url) {
-				var filePath = 'screenshots/' + site.name + fileStamp + profile.name + '/';
+				var filePath = settings.rootFolderName + '/' + site.name + fileStamp + profile.name + '/';
 
 				queue.push({
 					url: url,
@@ -41,7 +40,7 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 			setTimeout(function() {
 				var item = queue.shift();
 				takeIndividualScreenshot(item.url, item.filePath, item.profile, processQueue);
-			}, throttle);
+			}, settings.throttleDelay);
 		} else {
 			console.log('Finished taking screenshots.');
 		}
