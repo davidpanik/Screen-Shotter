@@ -22,6 +22,8 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 
 	// Queue up all sites and profiles
 	sites.forEach(function(site) {
+		site.cookies = site.cookies || [];
+
 		profiles.forEach(function(profile) {
 			var filePath = settings.rootFolderName + '/' + site.name + fileStamp + profile.name + '/';
 			newFolders.push(filePath);
@@ -31,19 +33,24 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 					id       : id,
 					url      : site.urls[id],
 					filePath : filePath,
-					profile  : profile
+					profile  : profile,
+					cookies  : site.cookies
 				});
 			}
 		});
 	});
 
-	function processQueue() {
+	function processQueue(err) {
+		if (err) {
+			console.log(err);
+		}
+
 		// Check if there's more URLs to process
 		if (queue.length) {
 			// Put a delay to avoid spamming servers
 			setTimeout(function() {
 				var item = queue.shift();
-				takeIndividualScreenshot(item.id, item.url, item.filePath, item.profile, processQueue);
+				takeIndividualScreenshot(item.id, item.url, item.filePath, item.profile, item.cookies, processQueue);
 			}, settings.throttleDelay);
 		} else {
 			console.log('Finished taking screenshots.');
@@ -55,7 +62,7 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 }
 
 
-function takeIndividualScreenshot(id, url, path, profile, callback) {
+function takeIndividualScreenshot(id, url, path, profile, cookies, callback) {
 	console.log('Capturing ' + id + ' ' + url + ' on ' + profile.name);
 
 	// Create a nice filename based on the URL
@@ -79,7 +86,8 @@ function takeIndividualScreenshot(id, url, path, profile, callback) {
 						width:  profile.width,
 						height: 'all'
 					},
-					userAgent: profile.userAgent
+					userAgent: profile.userAgent,
+					cookies: cookies || []
 				},
 				callback || function() {}
 			);
