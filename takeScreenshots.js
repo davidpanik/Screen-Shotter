@@ -18,7 +18,7 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 	callback = callback || function() {};
 
 	var queue = [];
-	var fileStamp = '/' + moment().format('DD_MM_YYYY') + '/' + moment().format('hh_mm') + '/';
+	var fileStamp = '/' + moment().format('DD_MM_YYYY') + '/' + moment().format('HH_mm') + '/';
 	var newFolders = [];
 
 	// Queue up all sites and profiles
