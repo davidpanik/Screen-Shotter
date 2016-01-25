@@ -1,6 +1,7 @@
 /*
 	TODO
 
+	Write difference images to file
 */
 
 
@@ -23,6 +24,5 @@ compareScreenshots(
 	'.\\screenshots\\realise\\22_01_2016\\12_23\\iphone6_landscape\\',
 	function(differences) {
 		console.log('Finished comparing screenshots - ' + differences.length + ' differences found.');
-		console.log(differences);
 	}
 );
