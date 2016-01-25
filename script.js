@@ -20,8 +20,8 @@ var sites              = require('./settings/sites');
 // );
 
 compareScreenshots(
-	'.\\screenshots\\realise\\22_01_2016\\12_17\\iphone6_landscape\\',
-	'.\\screenshots\\realise\\22_01_2016\\12_23\\iphone6_landscape\\',
+	'.\\screenshots\\realise\\25_01_2016\\09_50\\iphone6_landscape\\',
+	'.\\screenshots\\realise\\25_01_2016\\09_51\\iphone6_landscape\\',
 	function(differences) {
 		console.log('Finished comparing screenshots - ' + differences.length + ' differences found.');
 	}

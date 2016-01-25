@@ -26,13 +26,14 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 			var filePath = settings.rootFolderName + '/' + site.name + fileStamp + profile.name + '/';
 			newFolders.push(filePath);
 
-			site.urls.forEach(function(url) {
+			for (var id in site.urls) {
 				queue.push({
-					url      : url,
+					id       : id,
+					url      : site.urls[id],
 					filePath : filePath,
 					profile  : profile
 				});
-			});
+			}
 		});
 	});
 
@@ -42,7 +43,7 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 			// Put a delay to avoid spamming servers
 			setTimeout(function() {
 				var item = queue.shift();
-				takeIndividualScreenshot(item.url, item.filePath, item.profile, processQueue);
+				takeIndividualScreenshot(item.id, item.url, item.filePath, item.profile, processQueue);
 			}, settings.throttleDelay);
 		} else {
 			console.log('Finished taking screenshots.');
@@ -54,11 +55,11 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 }
 
 
-function takeIndividualScreenshot(url, path, profile, callback) {
-	console.log('Capturing ' + url + ' on ' + profile.name);
+function takeIndividualScreenshot(id, url, path, profile, callback) {
+	console.log('Capturing ' + id + ' ' + url + ' on ' + profile.name);
 
 	// Create a nice filename based on the URL
-	var fileName = (url.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.png');
+	var fileName = (id.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.png');
 
 	// Create the new folder path first
 	mkdirp(path, function (err) {
