@@ -1,6 +1,7 @@
 var webshot  = require('webshot');
 var mkdirp   = require('mkdirp');
 var moment   = require('moment');
+var btoa     = require('btoa');
 
 var settings = require('./settings/settings');
 
@@ -23,6 +24,7 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 	// Queue up all sites and profiles
 	sites.forEach(function(site) {
 		site.cookies = site.cookies || [];
+		site.login = site.login || false;
 
 		profiles.forEach(function(profile) {
 			var filePath = settings.rootFolderName + '/' + site.name + fileStamp + profile.name + '/';
@@ -34,7 +36,8 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 					url      : site.urls[id],
 					filePath : filePath,
 					profile  : profile,
-					cookies  : site.cookies
+					cookies  : site.cookies,
+					login    : site.login
 				});
 			}
 		});
@@ -50,7 +53,7 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 			// Put a delay to avoid spamming servers
 			setTimeout(function() {
 				var item = queue.shift();
-				takeIndividualScreenshot(item.id, item.url, item.filePath, item.profile, item.cookies, processQueue);
+				takeIndividualScreenshot(item.id, item.url, item.filePath, item.profile, item.cookies, item.login, processQueue);
 			}, settings.throttleDelay);
 		} else {
 			console.log('Finished taking screenshots.');
@@ -62,7 +65,7 @@ function takeMultipleScreenshots(sites, profiles, callback) {
 }
 
 
-function takeIndividualScreenshot(id, url, path, profile, cookies, callback) {
+function takeIndividualScreenshot(id, url, path, profile, cookies, login, callback) {
 	console.log('Capturing ' + id + ' ' + url + ' on ' + profile.name);
 
 	// Create a nice filename based on the URL
@@ -73,22 +76,36 @@ function takeIndividualScreenshot(id, url, path, profile, cookies, callback) {
 		if (err) {
 			console.log(path, err);
 		} else {
+			var options = {
+				screenSize: {
+					width:  profile.width,
+					height: profile.height
+				},
+				shotSize: {
+					width:  profile.width,
+					height: 'all'
+				}
+			};
+
+			if (profile.userAgent) {
+				options.userAgent = profile.userAgent;
+			}
+
+			if (cookies) {
+				options.cookies = cookies;
+			}
+
+			if (login) {
+				options.customHeaders = {
+					'Authorization': 'Basic '+ btoa(login.username + ':' + login.password)
+				};
+			}
+
 			// Take the actual screenshot
 			webshot(
 				url,
 				path + fileName,
-				{
-					screenSize: {
-						width:  profile.width,
-						height: profile.height
-					},
-					shotSize: {
-						width:  profile.width,
-						height: 'all'
-					},
-					userAgent: profile.userAgent,
-					cookies: cookies || []
-				},
+				options,
 				callback || function() {}
 			);
 		}

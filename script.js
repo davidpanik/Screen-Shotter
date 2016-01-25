@@ -12,7 +12,7 @@ var profiles           = require('./settings/profiles');
 var sites              = require('./settings/sites');
 
 takeScreenshots(
-	[sites.sli_europe_syst],
+	[sites.sli_europe_dev, sites.sli_europe_syst],
 	[profiles.desktop, profiles.iphone6_landscape],
 	function(newFolders) {
 		console.log('Finished taking screenshots - ' + newFolders.length + ' new folders created.');

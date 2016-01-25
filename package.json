@@ -3,6 +3,7 @@
 		"webshot"  : "latest",
 		"mkdirp"   : "latest",
 		"node-resemble-js" : "latest",
-		"moment"   : "latest"
+		"moment"   : "latest",
+		"btoa"   : "latest"
 	}
 }
